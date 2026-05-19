@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\Route;
 // --- PUBLIC ROUTES ---
 
 // Homepage (Marketing Page)
-Route::view('/', 'home')->name('home');
+Route::get('/', function () {
+    if (Illuminate\Support\Facades\Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    return view('home');
+})->name('home');
 
 // Buyer Home Dashboard (For products)
 Route::get('/buyer/home', function (Request $request) {

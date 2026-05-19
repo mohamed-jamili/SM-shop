@@ -122,7 +122,7 @@ class Order extends Model
     {
         if ($this->relationLoaded('items')) {
             return $this->items
-                ->where('seller_id', $sellerId)
+                ->filter(fn($item) => (int) $item->seller_id === (int) $sellerId)
                 ->values();
         }
 
@@ -131,9 +131,6 @@ class Order extends Model
             ->get();
     }
 
-    /**
-     * Aggregate status for a single seller's items within a shared order.
-     */
     public function sellerStatus(int $sellerId): string
     {
         return OrderStatusFlow::aggregate(

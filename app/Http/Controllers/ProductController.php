@@ -82,6 +82,11 @@ class ProductController extends Controller
     {
         $this->ensureOwnership($product);
 
+        if ($product->orderItems()->exists()) {
+            $product->update(['is_active' => false]);
+            return redirect()->back()->with('success', 'Product has order history and has been archived instead of deleted.');
+        }
+
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
         }

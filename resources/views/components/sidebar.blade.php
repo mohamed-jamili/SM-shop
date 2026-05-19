@@ -5,7 +5,7 @@
 
 <aside class="dashboard-sidebar">
     <div class="sidebar-brand-wrapper">
-        <a href="{{ route('home') }}" class="sidebar-brand">
+        <a href="{{ auth()->check() ? (auth()->user()->isSeller() ? route('seller.home') : route('buyer.home')) : route('home') }}" class="sidebar-brand">
             <img src="{{ asset('images/sm-logo.jpg') }}" alt="SM-SHOP Logo"
                 style="width: 50px; height: 50px; object-fit: contain; border-radius: 8px;">
             <div class="brand-text">
@@ -34,7 +34,10 @@
                         <div class="nav-icon-box"><i data-lucide="shopping-bag"></i></div>
                         <span>Sold Products</span>
                         @php
-                            $pendingCount = \App\Models\OrderItem::where('seller_id', $user->id)->where('status', 'pending')->count();
+                            $pendingCount = \App\Models\OrderItem::where('seller_id', $user->id)
+                                ->where('status', 'pending')
+                                ->whereHas('order', fn($query) => $query->whereNotNull('ordered_at'))
+                                ->count();
                         @endphp
                         @if($pendingCount > 0)
                             <span class="nav-badge" style="background: #ef4444;">{{ $pendingCount }}</span>
@@ -315,6 +318,23 @@
         font-weight: 800;
         padding: 2px 8px;
         border-radius: 20px;
+    }
+
+    .dashboard-sidebar .notification-badge {
+        position: static !important;
+        top: auto !important;
+        right: auto !important;
+        display: inline-flex !important;
+        width: auto !important;
+        height: auto !important;
+        border: none !important;
+        margin-left: auto !important;
+        padding: 2px 8px !important;
+        font-size: 0.7rem !important;
+        font-weight: 800 !important;
+        border-radius: 20px !important;
+        background: #f97316 !important;
+        color: #fff !important;
     }
 
     .sidebar-section {

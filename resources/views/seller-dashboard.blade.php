@@ -506,12 +506,6 @@
                     </div>
 
                     <div class="header-actions">
-                        <a href="{{ route('notifications.index') }}" class="notification-action" title="View notifications">
-                            <i data-lucide="bell" style="width: 20px; height: 20px;"></i>
-                            @if(auth()->user()->unreadNotifications()->count() > 0)
-                                <span class="notification-badge">{{ auth()->user()->unreadNotifications()->count() }}</span>
-                            @endif
-                        </a>
                         <div class="stat-badge up" style="padding: 0.6rem 1rem; background: #fff; border: 1px solid var(--border-subtle);">
                             <i data-lucide="shield-check" style="width: 18px;"></i>
                             <span>Verified Seller Account</span>

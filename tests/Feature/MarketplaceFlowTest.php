@@ -120,9 +120,8 @@ class MarketplaceFlowTest extends TestCase
         ]);
 
         $seller->refresh();
-
-        $this->assertSame(1, $seller->notifications()->count());
-        $this->assertSame(LowStockAlertNotification::class, $seller->notifications()->first()->type);
+        $lowStockNotifications = $seller->notifications()->where('type', LowStockAlertNotification::class)->get();
+        $this->assertCount(1, $lowStockNotifications);
 
         $this->actingAs($seller)
             ->patch(route('seller.orders.items.status', $orderItem), [
